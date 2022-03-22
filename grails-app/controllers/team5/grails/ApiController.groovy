@@ -1,4 +1,4 @@
-package mooc_project
+package team5.grails
 
 import grails.converters.JSON
 import grails.converters.XML

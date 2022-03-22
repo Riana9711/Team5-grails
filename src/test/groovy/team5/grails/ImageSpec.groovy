@@ -1,9 +1,9 @@
-package mooc_project
+package team5.grails
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class CategorieSpec extends Specification implements DomainUnitTest<Categorie> {
+class ImageSpec extends Specification implements DomainUnitTest<Image> {
 
     def setup() {
     }

@@ -1,9 +1,9 @@
-package mooc_project
+package team5.grails
 
-import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-class ImageSpec extends Specification implements DomainUnitTest<Image> {
+class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiController> {
 
     def setup() {
     }

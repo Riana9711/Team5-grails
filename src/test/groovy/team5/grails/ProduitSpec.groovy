@@ -1,9 +1,9 @@
-package mooc_project
+package team5.grails
 
-import grails.testing.web.controllers.ControllerUnitTest
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiController> {
+class ProduitSpec extends Specification implements DomainUnitTest<Produit> {
 
     def setup() {
     }

@@ -4,7 +4,7 @@ grails:
         enabled: true
     profile: web
     codegen:
-        defaultPackage: mooc_project
+        defaultPackage: team5.grails
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events

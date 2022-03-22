@@ -12,7 +12,7 @@ buildscript {
 }
 
 version "0.1"
-group "mooc_project"
+group "team5.grails"
 
 apply plugin:"eclipse"
 apply plugin:"idea"

@@ -1,4 +1,4 @@
-package mooc_project
+package team5.grails
 
 import grails.transaction.Transactional
 
