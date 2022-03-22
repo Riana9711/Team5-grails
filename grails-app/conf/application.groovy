@@ -27,6 +27,17 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],
 	[pattern: '/**/favicon.ico', filters: 'none'],
-	[pattern: '/**',             filters: 'JOINED_FILTERS']
+
+	//Stateless chain
+	[
+			pattern: '/api/**',
+			filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,' +
+					'-authenticationProcessingFilter,-securityContextPersistenceFilter,' +
+					'-rememberMeAuthenticationFilter'
+	],
+
+	//Traditional, stateful chain
+	[pattern: '/**', filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
+
 ]
 
