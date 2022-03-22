@@ -2,7 +2,9 @@ package team5.grails
 
 import grails.converters.JSON
 import grails.converters.XML
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(value=["hasRole('ROLE_CLIENT')"])
 class ApiController {
 
     //api/produits/{id}
