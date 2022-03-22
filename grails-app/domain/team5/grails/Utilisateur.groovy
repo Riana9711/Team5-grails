@@ -13,6 +13,7 @@ class Utilisateur implements Serializable {
 
     String username
     String password
+    String email
     Date createdAt
     boolean enabled = true
     boolean accountExpired
@@ -28,8 +29,8 @@ class Utilisateur implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
+        email nullable: Boolean.FALSE, blank: Boolean.FALSE, unique: Boolean.TRUE
         createdAt nullable: Boolean.TRUE
-
     }
 
     static mapping = {
