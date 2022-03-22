@@ -1,11 +1,11 @@
 
-
+grails.plugin.springsecurity.logout.postOnly = false
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'team5.grails.Utilisateur'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'team5.grails.UtilisateurRole'
 grails.plugin.springsecurity.authority.className = 'team5.grails.Role'
 grails.plugin.springsecurity.requestMap.className = 'team5.grails.UtilisateurRole'
-grails.plugin.springsecurity.securityConfigType = 'Requestmap'
+grails.plugin.springsecurity.securityConfigType = 'Annotation'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/',               access: ['permitAll']],
 	[pattern: '/error',          access: ['permitAll']],
