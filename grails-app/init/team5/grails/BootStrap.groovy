@@ -61,11 +61,18 @@ class BootStrap {
 
     @Transactional
     def anotherMagicalData(){
+
+        def adminRole = new Role(authority: 'ROLE_ADMIN').save()
+        def clientRole = new Role(authority: 'ROLE_CLIENT').save()
+
+        def admin = new Utilisateur(username: "admin", email: "admin@gmail.com", password: "admin").save()
+        UtilisateurRole.create(admin, adminRole);
+
         ["t-shirt", "pantalon", "chemise", "costard"].each {String libelle ->
             new Categorie(libelle: libelle).save()
         }
         ["harry", "sandie"].eachWithIndex {String username, i ->
-            def utilisateurInstance = new Utilisateur(username: username, email: "$username@ituniversity-mg.com", createdAt: new Date())
+            def utilisateurInstance = new Utilisateur(username: username, email: "$username@ituniversity-mg.com", createdAt: new Date(), password: "password")
             (1..5).each {
                 Integer index ->
                     def produitInstance = new Produit(
@@ -90,6 +97,14 @@ class BootStrap {
 
             }
             utilisateurInstance.save()
+
+            UtilisateurRole.create(utilisateurInstance, clientRole);
+
+            UtilisateurRole.withSession {
+                it.flush();
+                it.clear();
+            }
+
         }
 
         insertAnnonce()
