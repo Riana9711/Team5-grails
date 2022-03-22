@@ -1,5 +1,7 @@
 ---
 grails:
+    cors:
+        enabled: true
     profile: web
     codegen:
         defaultPackage: mooc_project
@@ -19,6 +21,9 @@ spring:
     groovy:
         template:
             check-template-location: false
+    h2:
+        console:
+            enabled: true
 
 # Spring Actuator Endpoints are Disabled by Default
 endpoints:
@@ -128,4 +133,4 @@ environments:
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
 server:
-    port: 8095
+    port: 8081
