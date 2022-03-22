@@ -13,10 +13,13 @@ class Utilisateur implements Serializable {
 
     String username
     String password
+    Date createdAt
     boolean enabled = true
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
+
+    static hasMany = [produits: Produit]
 
     Set<Role> getAuthorities() {
         (UtilisateurRole.findAllByUtilisateur(this) as List<UtilisateurRole>)*.role as Set<Role>
@@ -25,6 +28,8 @@ class Utilisateur implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
+        createdAt nullable: Boolean.TRUE
+
     }
 
     static mapping = {
