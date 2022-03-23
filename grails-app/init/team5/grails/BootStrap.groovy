@@ -76,7 +76,7 @@ class BootStrap {
             (1..5).each {
                 Integer index ->
                     def produitInstance = new Produit(
-                            libelle: "Test titre",
+                            libelle: "$username produit $index",
                             description: "Description Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                             prix: 12,
                             dateCreated: new Date(),
