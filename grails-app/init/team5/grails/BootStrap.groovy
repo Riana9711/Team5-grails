@@ -85,6 +85,8 @@ class BootStrap {
                         }
                     }
                     utilisateurInstance.addToProduits(produitInstance)
+                    def commandeInstance = new Commande(utilisateur: utilisateurInstance,produit: produitInstance,nombre: (i+1),statut: Commande.STATUS_EN_ATTENTE,prixTotal: ((i+1)*12))
+                    commandeInstance.save()
 
             }
             utilisateurInstance.save()
