@@ -111,16 +111,22 @@ class BootStrap {
     }
 
     @Transactional
-    def insertAnnonce(){
+    def insertAnnonce() {
         (1..3).each {
-            def annonceInstance = new Annonce(
-                    libelle: "Test $it",
-                    description: "Hola",
-                    active: Boolean.TRUE,
-                    dateCreated: new Date(),
-                    image: new Image(filename: "$it-0.jpeg")
-            )
-            annonceInstance.save()
+            Integer index ->
+                def annonce = new Annonce(
+                        libelle:  "Image $index",
+                        description:  "Description $index",
+                        rang: index,
+                        active: index == 1,
+                        dateCreated:  new Date(),
+                        image: new Image(filename: "$index-0.jpg")
+                )
+                if(!annonce.save()){
+                    annonce.errors.getAllErrors().each {
+                        println(it)
+                    }
+                }
         }
     }
 }

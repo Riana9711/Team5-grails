@@ -149,4 +149,53 @@ class ApiController {
         }
         return response.status = 406
     }
+
+    def annonces() {
+        def annonceInstance
+
+        // recuperation de la methode HTTP de l'annonce
+        switch (request.getMethod()) {
+            case "GET":
+                if (!params.id) {
+                    annonceInstance = Annonce.list()
+                } else {
+                    annonceInstance = Annonce.get(params.id)
+                }
+
+                if (!annonceInstance)
+                    response.status = 404
+
+                response.withFormat {
+                    json { render annonceInstance as JSON }
+                    xml { render annonceInstance as XML }
+                }
+                break
+
+            case "POST":
+                def dataannonce = request.JSON
+                annonceInstance = new Annonce(dataannonce)
+
+                annonceInstance.validate()
+                if (annonceInstance.hasErrors()) {
+                    response.status = 422
+                    def erreurs = annonceInstance.errors.allErrors.collect {
+                        message(error: it)
+                    }
+                    render( erreurs as JSON)
+                }
+
+                annonceInstance.save()
+                return response.status = 204
+
+                break
+
+            case "PUT":
+                break
+            case "DELETE":
+                break
+            default:
+                break
+        }
+        return response.status = 406
+    }
 }
