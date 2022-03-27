@@ -61,15 +61,22 @@ class BootStrap {
 
     @Transactional
     def anotherMagicalData(){
+
+        def adminRole = new Role(authority: 'ROLE_ADMIN').save()
+        def clientRole = new Role(authority: 'ROLE_CLIENT').save()
+
+        def admin = new Utilisateur(username: "admin", email: "admin@gmail.com", password: "admin").save()
+        UtilisateurRole.create(admin, adminRole);
+
         ["t-shirt", "pantalon", "chemise", "costard"].each {String libelle ->
             new Categorie(libelle: libelle).save()
         }
         ["harry", "sandie"].eachWithIndex {String username, i ->
-            def utilisateurInstance = new Utilisateur(username: username, email: "$username@ituniversity-mg.com", createdAt: new Date())
+            def utilisateurInstance = new Utilisateur(username: username, email: "$username@ituniversity-mg.com", createdAt: new Date(), password: "password")
             (1..5).each {
                 Integer index ->
                     def produitInstance = new Produit(
-                            libelle: "Test titre",
+                            libelle: "$username produit $index",
                             description: "Description Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                             prix: 12,
                             dateCreated: new Date(),
@@ -90,22 +97,36 @@ class BootStrap {
 
             }
             utilisateurInstance.save()
+
+            UtilisateurRole.create(utilisateurInstance, clientRole);
+
+            UtilisateurRole.withSession {
+                it.flush();
+                it.clear();
+            }
+
         }
 
         insertAnnonce()
     }
 
     @Transactional
-    def insertAnnonce(){
+    def insertAnnonce() {
         (1..3).each {
-            def annonceInstance = new Annonce(
-                    libelle: "Test $it",
-                    description: "Hola",
-                    active: Boolean.TRUE,
-                    dateCreated: new Date(),
-                    image: new Image(filename: "$it-0.jpeg")
-            )
-            annonceInstance.save()
+            Integer index ->
+                def annonce = new Annonce(
+                        libelle:  "Image $index",
+                        description:  "Description $index",
+                        rang: index,
+                        active: index == 1,
+                        dateCreated:  new Date(),
+                        image: new Image(filename: "$index-0.jpg")
+                )
+                if(!annonce.save()){
+                    annonce.errors.getAllErrors().each {
+                        println(it)
+                    }
+                }
         }
     }
 }

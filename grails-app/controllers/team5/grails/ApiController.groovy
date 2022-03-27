@@ -2,7 +2,9 @@ package team5.grails
 
 import grails.converters.JSON
 import grails.converters.XML
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(value=["hasRole('ROLE_CLIENT')"])
 class ApiController {
 
     //api/produits/{id}
@@ -141,6 +143,138 @@ class ApiController {
             case "PUT":
                 break
             case "DELETE":
+                break
+            default:
+                break
+        }
+        return response.status = 406
+    }
+
+    def annonces() {
+        def annonceInstance
+
+        // recuperation de la methode HTTP de l'annonce
+        switch (request.getMethod()) {
+            case "GET":
+                if (!params.id) {
+                    annonceInstance = Annonce.list()
+                } else {
+                    annonceInstance = Annonce.get(params.id)
+                }
+
+                if (!annonceInstance)
+                    response.status = 404
+
+                response.withFormat {
+                    json { render annonceInstance as JSON }
+                    xml { render annonceInstance as XML }
+                }
+                break
+
+            case "POST":
+                def dataannonce = request.JSON
+                annonceInstance = new Annonce(dataannonce)
+
+                annonceInstance.validate()
+                if (annonceInstance.hasErrors()) {
+                    response.status = 422
+                    def erreurs = annonceInstance.errors.allErrors.collect {
+                        message(error: it)
+                    }
+                    render( erreurs as JSON)
+                }
+
+                annonceInstance.save()
+                return response.status = 204
+
+                break
+
+            case "PUT":
+                break
+            case "DELETE":
+                break
+            default:
+                break
+        }
+        return response.status = 406
+    }
+
+    def searchAdvancedProduct() {
+        def produits
+        println("+++++++++ debut ++++++++++")
+        println(request.requestURL)
+        println(request.queryString)
+        // recuperation de la methode HTTP de l'utilisateur
+        switch (request.getMethod()) {
+            case "GET":
+                // check existance params
+                if (!params.offset || !params.limit) {
+                    return response.status = 400
+                }
+                int offset, limit;
+                def libelle = params.libelle ? params.libelle : ""
+                def categorie = params.categorie
+                int total = 0;
+                // check integrite valeur params
+                try{
+                    offset = Integer.parseInt(params.offset);
+                    limit = Integer.parseInt(params.limit);
+                }catch(Exception e){
+                    return response.status = 400
+                }
+
+                if (categorie){
+                    total = Produit.countByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%")
+                    produits = Produit.findAllByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
+                }else{
+                    total = Produit.countByLibelleLike("%$libelle%")
+                    produits = Produit.findAllByLibelleLike("%$libelle%",[max: limit, offset: offset])
+                }
+                println("Nombre total = "+produits.size()+"/20")
+
+                if (!produits)
+                    response.status = 404
+
+                def response = [
+                        "produits": produits,
+                        "total": total
+                ]
+                println("+++++++++ fin ++++++++++")
+
+                render response as JSON
+                /*response.withFormat {
+                    json { render { produits: produits } as JSON }
+                    xml { render { produits: produits } as XML }
+                }*/
+                break
+
+            case "POST":
+                break
+
+            case "PUT":
+                break
+            case "DELETE":
+                break
+            default:
+                break
+        }
+        return response.status = 406
+    }
+
+    def categories(){
+        def categoriesInst
+
+        switch (request.getMethod()) {
+            case "GET":
+                categoriesInst = Categorie.list()
+
+                if (!categoriesInst)
+                    response.status = 404
+
+                response.withFormat {
+                    json { render categoriesInst as JSON }
+                    xml { render categoriesInst as XML }
+                }
                 break
             default:
                 break
