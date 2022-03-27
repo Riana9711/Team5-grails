@@ -1,4 +1,4 @@
-package mooc_project
+package team5.grails
 
 class Commande {
     Utilisateur utilisateur
