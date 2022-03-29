@@ -2,10 +2,13 @@ package team5.grails
 
 import grails.converters.JSON
 import grails.converters.XML
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(value=["hasRole('ROLE_CLIENT')"])
 class ApiController {
+
+    SpringSecurityService springSecurityService
 
     //api/produits/{id}
     def produits() {
@@ -280,5 +283,110 @@ class ApiController {
                 break
         }
         return response.status = 406
+    }
+
+    def findAllCommandByCurrentUser() {
+        def commandesInst
+
+        switch (request.getMethod()) {
+            case "GET":
+                long currentUserId = springSecurityService.getCurrentUserId();
+                commandesInst = Commande.findAllByUtilisateur(Utilisateur.get(currentUserId));
+                if (!commandesInst)
+                    response.status = 404
+
+                def commandesList= []
+                commandesInst.each {Commande commande ->
+                    def commandeInfo = [:]
+                    commandeInfo['idCommande'] = commande.id
+                    commandeInfo['nombre'] = commande.nombre
+                    commandeInfo['statut'] = commande.statut
+                    commandeInfo['prixTotal'] = commande.prixTotal
+                    Produit produitInstance = Produit.get(commande.produit.id)
+                    commandeInfo['nomProduit'] = produitInstance.libelle
+                    commandeInfo['prixProduit'] = produitInstance.prix
+                    commandesList.add(commandeInfo)
+                }
+
+                response.withFormat {
+                    json { render commandesList as JSON }
+                    xml { render commandesList as XML }
+                }
+                break
+            default:
+                break
+        }
+        return response.status = 406
+    }
+
+    def insertCommande() {
+        switch (request.getMethod()) {
+            case "POST":
+                if (!request.JSON.idProduit || !request.JSON.nombre) {
+                    return response.status = 400
+                }
+                long currentUserId = springSecurityService.getCurrentUserId();
+                def utilisateurInstance = Utilisateur.get(currentUserId)
+                def produitInstance = Produit.get(request.JSON.idProduit)
+                if (!utilisateurInstance || !produitInstance)
+                    return response.status = 404
+                Integer nombre = request.JSON.nombre
+                Double prix = produitInstance.prix
+                def newCommande = new Commande(utilisateur: utilisateurInstance, produit: produitInstance, nombre: nombre, statut: Commande.STATUS_EN_ATTENTE, prixTotal: nombre*prix)
+
+                def message = ''
+                def status = ''
+                if (!newCommande.save()) {
+                    status = 'error'
+                    newCommande.errors.allErrors.each {
+                        message = it
+                    }
+                }
+                else
+                    status = 'success'
+
+                def responseData = [
+                        'status': status,
+                        'message': message,
+                ]
+
+                response.withFormat {
+                    json { render responseData as JSON }
+                    xml { render responseData as XML }
+                }
+                break
+            default:
+                break
+        }
+    }
+
+    def validateCommande() {
+        switch (request.getMethod()) {
+            case "POST":
+                if (!params.idCommande ) {
+                    return response.status = 400
+                }
+                def commande = Commande.get(params.idCommande)
+                commande.setStatut(Commande.STATUS_VALIDE)
+                if (commande.isDirty())
+                    commande.save()
+                def message = ''
+                def status = ''
+
+                    status = 'success'
+
+                def responseData = [
+                        'status': status,
+                        'message': message,
+                ]
+
+                response.withFormat {
+                    json { render responseData as JSON }
+                    xml { render responseData as XML }
+                }
+                break
+            default:
+                break
+        }
     }
 }
