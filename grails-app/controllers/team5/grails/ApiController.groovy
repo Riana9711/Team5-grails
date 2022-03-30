@@ -248,11 +248,13 @@ class ApiController {
                 }
 
                 if (categorie){
-                    total = Produit.countByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%")
-                    produits = Produit.findAllByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
+                    Hashtag.where { lower(tag) == "#london" }.list()
+
+                    total = Produit.countByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%")
+                    produits = Produit.findAllByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
                 }else{
-                    total = Produit.countByLibelleLike("%$libelle%")
-                    produits = Produit.findAllByLibelleLike("%$libelle%",[max: limit, offset: offset])
+                    total = Produit.countByLibelleIlike("%$libelle%")
+                    produits = Produit.findAllByLibelleIlike("%$libelle%",[max: limit, offset: offset])
                 }
                 println("Nombre total = "+produits.size()+"/20")
 
