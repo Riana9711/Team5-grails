@@ -90,6 +90,27 @@ class ApiController {
         return response.status = 406
     }
 
+    def topSelling(){
+        // SELECT sum(NOMBRE) as total, PRODUIT_ID from COMMANDE GROUP BY PRODUIT_ID order by total desc limit 5
+        def produitInstance
+
+        switch (request.getMethod()) {
+            case "GET":
+                def criteriaCommand = Commande.createCriteria();
+                def results = criteriaCommand.list(max:6){
+                    property("total", "PRODUIT_ID")
+                    sum("NOMBRE", "total")
+                    groupProperty("PRODUIT_ID")
+                    order("total", "desc")
+                }
+                render results as JSON
+                break;
+            default:
+                break
+        }
+        return response.status = 406
+
+    }
 
     def searchProductByLibelle() {
         def produits
