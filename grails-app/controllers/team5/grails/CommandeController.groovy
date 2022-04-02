@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.*
 class CommandeController {
 
     CommandeService commandeService
+    ProduitService produitService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -97,5 +98,26 @@ class CommandeController {
             }
             '*'{ render status: NOT_FOUND }
         }
+    }
+
+    def accepterCommande(Long id){
+
+        def commande = commandeService.get(id)
+
+        // s'il n'y a plus de stock
+        if (commande.nombre > commande.produit.stock){
+            flash.message = message(code: 'command.ruptureStockProduit.message', args: [commande.produit])
+        }else{
+            commande.produit.stock = commande.produit.stock - commande.nombre
+            produitService.save(commande.produit)
+
+            def produit = produitService.get(commande.produit.id)
+
+            // commande validée, reste stock produit 1 = 5
+            flash.message = message(code: 'command.reussi.message', args: [commande.produit, produit.stock])
+
+        }
+
+        redirect controller: 'commande', action: 'index'
     }
 }
