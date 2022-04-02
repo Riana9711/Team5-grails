@@ -5,7 +5,7 @@ import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
 //@Secured(['IS_AUTHENTICATED_ANONYMOUSLY']) // n'a pas besoin d'authentification
-@Secured(['ROLE_CLIENT', 'ROLE_ADMIN'])
+@Secured(['ROLE_ADMIN'])
 class ProduitController {
 
     ProduitService produitService
