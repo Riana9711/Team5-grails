@@ -6,4 +6,7 @@ class Categorie {
     static constraints = {
         libelle nullable: Boolean.FALSE, blank: Boolean.FALSE, size: 5..255
     }
+
+    String toString() { return libelle }
+
 }

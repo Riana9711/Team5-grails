@@ -8,4 +8,7 @@ class Image {
         filename nullable: true, blank: true
         produit nullable: Boolean.TRUE
     }
+
+    String toString() { return filename }
+
 }

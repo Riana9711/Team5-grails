@@ -29,4 +29,7 @@ class Produit {
         lastUpdated nullable: Boolean.TRUE
         categorie nullable: Boolean.FALSE
     }
+
+    String toString() { return libelle }
+
 }

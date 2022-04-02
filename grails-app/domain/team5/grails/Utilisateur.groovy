@@ -36,4 +36,6 @@ class Utilisateur implements Serializable {
     static mapping = {
 	    password column: '`password`'
     }
+
+    String toString() { return username }
 }

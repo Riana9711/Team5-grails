@@ -19,4 +19,7 @@ class Annonce {
         active nullable: Boolean.FALSE
         rang nullable: Boolean.FALSE
     }
+
+    String toString() { return libelle }
+
 }
