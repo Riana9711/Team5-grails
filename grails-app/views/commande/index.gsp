@@ -18,7 +18,69 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${commandeList}" />
+            %{--<f:table collection="${commandeList}" />--}%
+            <table>
+                <thead>
+                <tr>
+                    %{--<g:each in="${domainProperties}" var="p" status="i">
+                        <g:set var="propTitle">
+                            ${domainClass.propertyName}.${p.name}.label
+                        </g:set>
+                        <g:sortableColumn property="${p.name}"
+                                          title="${message(code: propTitle, default: p.naturalName)}" />
+                    </g:each>--}%
+                    <th>Utilisateur</th>
+                    <th>Produit</th>
+                    <th>Nombre</th>
+                    <th>Status</th>
+                    <th>Prix Total</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <g:each in="${commandeList}" var="command" status="i">
+                    %{--<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                        <g:each in="${domainProperties}" var="p" status="j">
+                            <g:if test="${j==0}">
+                                <td>
+                                    <g:link method="GET" resource="${bean}">
+                                        <f:display bean="${bean}"
+                                                   property="${p.name}"
+                                                   displayStyle="${displayStyle?:'table'}" />
+                                    </g:link>
+                                </td>
+                            </g:if>
+                            <g:else>
+                                <td>
+                                    <f:display bean="${bean}"
+                                               property="${p.name}"
+                                               displayStyle="${displayStyle?:'table'}"/>
+                                </td>
+                            </g:else>
+                        </g:each>
+                    </tr>--}%
+                    <tr>
+                        <td>${command.utilisateur}</td>
+                        <td>${command.produit}</td>
+                        <td>${command.nombre}</td>
+                        <td>
+                            <g:if test="${command.statut==0}">
+                                En attente
+                            </g:if>
+                            <g:else>
+                                Validé
+                            </g:else>
+                        </td>
+                        <td>${command.prixTotal} ar</td>
+                        <td><g:link controller="commande" action="show"
+                                    params='[id: "${command.id}"]'>Détail</g:link>
+                        <g:link controller="commande" action="accepterCommande"
+                                params='[id: "${command.id}"]'>Accepter</g:link>
+                        </td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
 
             <div class="pagination">
                 <g:paginate total="${commandeCount ?: 0}" />
