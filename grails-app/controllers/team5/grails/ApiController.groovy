@@ -90,6 +90,27 @@ class ApiController {
         return response.status = 406
     }
 
+    def topSelling(){
+        // SELECT sum(NOMBRE) as total, PRODUIT_ID from COMMANDE GROUP BY PRODUIT_ID order by total desc limit 5
+        def produitInstance
+
+        switch (request.getMethod()) {
+            case "GET":
+                def criteriaCommand = Commande.createCriteria();
+                def results = criteriaCommand.list(max:6){
+                    property("total", "PRODUIT_ID")
+                    sum("NOMBRE", "total")
+                    groupProperty("PRODUIT_ID")
+                    order("total", "desc")
+                }
+                render results as JSON
+                break;
+            default:
+                break
+        }
+        return response.status = 406
+
+    }
 
     def searchProductByLibelle() {
         def produits
@@ -227,11 +248,13 @@ class ApiController {
                 }
 
                 if (categorie){
-                    total = Produit.countByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%")
-                    produits = Produit.findAllByCategorieAndLibelleLike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
+                    Hashtag.where { lower(tag) == "#london" }.list()
+
+                    total = Produit.countByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%")
+                    produits = Produit.findAllByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
                 }else{
-                    total = Produit.countByLibelleLike("%$libelle%")
-                    produits = Produit.findAllByLibelleLike("%$libelle%",[max: limit, offset: offset])
+                    total = Produit.countByLibelleIlike("%$libelle%")
+                    produits = Produit.findAllByLibelleIlike("%$libelle%",[max: limit, offset: offset])
                 }
                 println("Nombre total = "+produits.size()+"/20")
 
