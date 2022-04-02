@@ -27,9 +27,9 @@ class Utilisateur implements Serializable {
     }
 
     static constraints = {
-        password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: Boolean.FALSE, blank: Boolean.FALSE, unique: Boolean.TRUE
+        password nullable: false, blank: false, password: true
         createdAt nullable: Boolean.TRUE
     }
 
