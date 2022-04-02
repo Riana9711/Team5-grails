@@ -24,9 +24,19 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/#">
-                <asset:image src="grails.svg" alt="Grails Logo"/>
-            </a>
+           <div style="
+           justify-content: center;
+           align-items: center;
+           display: flex;
+           ">
+               <a class="navbar-brand" href="/#">
+                   <asset:image src="adminT.png" alt="admin Logo"/>
+               </a>
+               <strong style="
+               margin-left: 20px;
+               font-size: 40px;
+               "> Admin Page </strong>
+           </div>
         </div>
         <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
             <ul class="nav navbar-nav navbar-right">
