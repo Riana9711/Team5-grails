@@ -40,7 +40,20 @@
         </div>
         <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
             <ul class="nav navbar-nav navbar-right">
+                <sec:ifLoggedIn>
+                    <li>
+                        <g:link controller="logout">Se déconnecter</g:link>
+                    </li>
+                </sec:ifLoggedIn>
+                <sec:ifNotLoggedIn>
+                    <li>
+                        <g:link controller='login' action='auth'>Se connecter</g:link>
+                    </li>
+                </sec:ifNotLoggedIn>
+
+%{--
                 <g:pageProperty name="page.nav" />
+--}%
             </ul>
         </div>
     </div>

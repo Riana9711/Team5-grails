@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Welcome to Grails</title>
+    <title>Lamba | Admin</title>
 </head>
+
 <body>
 <content tag="nav">
-    <li class="dropdown">
+    %{--<li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application Status <span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li><a href="#">Environment: ${grails.util.Environment.current.name}</a></li>
@@ -40,7 +41,7 @@
                 <li><a href="#">${plugin.name} - ${plugin.version}</a></li>
             </g:each>
         </ul>
-    </li>
+    </li>--}%
 </content>
 
 <div class="svg" role="presentation">
@@ -51,23 +52,48 @@
 
 <div id="content" role="main">
     <section class="row colset-2-its">
-        <h1>Welcome to Grails</h1>
+        <sec:ifLoggedIn>
+            <h1>Bjr, <sec:username/>! Bienvenu dans l'administration</h1>
+        </sec:ifLoggedIn>
 
-        <p>
-            Congratulations, you have successfully started your first Grails application! At the moment
-            this is the default page, feel free to modify it to either redirect to a controller or display
-            whatever content you may choose. Below is a list of controllers that are currently deployed in
-            this application, click on each to execute its default action:
-        </p>
+
+        %{-- <p>
+             Congratulations, you have successfully started your first Grails application! At the moment
+             this is the default page, feel free to modify it to either redirect to a controller or display
+             whatever content you may choose. Below is a list of controllers that are currently deployed in
+             this application, click on each to execute its default action:
+         </p>--}%
 
         <div id="controllers" role="navigation">
-            <h2>Available Controllers:</h2>
+            %{--<h2>Available Controllers:</h2>
             <ul>
                 <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
                     <li class="controller">
                         <g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link>
                     </li>
                 </g:each>
+            </ul>--}%
+            <h2><strong>Gestion :</strong></h2>
+            <ul>
+                <li class="controller">
+                    <h3><g:link controller="utilisateur">Utilisateur</g:link></h3>
+                </li>
+                <li class="controller">
+                    <h3><g:link controller="annonce">Annonce</g:link></h3>
+                </li>
+                <li class="controller">
+                    <h3><g:link controller="produit">Produit</g:link></h3>
+                </li>
+                <li class="controller">
+                    <h3><g:link controller="categorie">Gestion Catégorie</g:link></h3>
+                </li>
+                <li class="controller">
+                    <h3><g:link controller="commande">Commande</g:link></h3>
+                </li>
+
+                <li class="controller">
+                    <h3><g:link controller="image">Image</g:link></h3>
+                </li>
             </ul>
         </div>
     </section>
