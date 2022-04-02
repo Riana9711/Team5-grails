@@ -79,6 +79,7 @@ class BootStrap {
                             libelle: "$username produit $index",
                             description: "Description Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                             prix: 12,
+                            stock: 10,
                             dateCreated: new Date(),
                             lastUpdated: new Date(),
                             auteur: utilisateurInstance,

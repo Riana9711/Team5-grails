@@ -9,6 +9,7 @@ class Produit {
     Date dateCreated
     Date lastUpdated
     Categorie categorie
+    int stock
 
 
     static belongsTo = [auteur: Utilisateur]
@@ -24,6 +25,7 @@ class Produit {
     static constraints = {
         libelle nullable: Boolean.FALSE, blank: Boolean.FALSE, size: 5..255
         description nullable: Boolean.FALSE, blank: Boolean.FALSE
+        stock min: 0
         prix min: 0d
         dateCreated nullable: Boolean.TRUE
         lastUpdated nullable: Boolean.TRUE
