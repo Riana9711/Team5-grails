@@ -108,12 +108,18 @@ class CommandeController {
         if (commande.nombre > commande.produit.stock){
             flash.message = message(code: 'command.ruptureStockProduit.message', args: [commande.produit])
         }else{
+
+            //décrementer stock produit
             commande.produit.stock = commande.produit.stock - commande.nombre
             produitService.save(commande.produit)
 
             def produit = produitService.get(commande.produit.id)
 
-            // commande validée, reste stock produit 1 = 5
+            // modifier status commande en validé
+            commande.statut = 1
+            commandeService.save(commande)
+
+            // "commande validée, reste stock produit 1 = 5"
             flash.message = message(code: 'command.reussi.message', args: [commande.produit, produit.stock])
 
         }

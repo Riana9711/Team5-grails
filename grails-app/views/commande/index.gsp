@@ -39,29 +39,10 @@
                 </thead>
                 <tbody>
                 <g:each in="${commandeList}" var="command" status="i">
-                    %{--<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <g:each in="${domainProperties}" var="p" status="j">
-                            <g:if test="${j==0}">
-                                <td>
-                                    <g:link method="GET" resource="${bean}">
-                                        <f:display bean="${bean}"
-                                                   property="${p.name}"
-                                                   displayStyle="${displayStyle?:'table'}" />
-                                    </g:link>
-                                </td>
-                            </g:if>
-                            <g:else>
-                                <td>
-                                    <f:display bean="${bean}"
-                                               property="${p.name}"
-                                               displayStyle="${displayStyle?:'table'}"/>
-                                </td>
-                            </g:else>
-                        </g:each>
-                    </tr>--}%
                     <tr>
                         <td>${command.utilisateur}</td>
-                        <td>${command.produit}</td>
+                        <td><g:link controller="produit" action="show"
+                                    params='[id: "${command.produit.id}"]'>${command.produit}</g:link></td>
                         <td>${command.nombre}</td>
                         <td>
                             <g:if test="${command.statut==0}">
@@ -74,8 +55,10 @@
                         <td>${command.prixTotal} ar</td>
                         <td><g:link controller="commande" action="show"
                                     params='[id: "${command.id}"]'>Détail</g:link>
-                        <g:link controller="commande" action="accepterCommande"
-                                params='[id: "${command.id}"]'>Accepter</g:link>
+                        <g:if test="${command.statut==0}">
+                            <g:link controller="commande" action="accepterCommande"
+                                    params='[id: "${command.id}"]'>Accepter</g:link>
+                        </g:if>
                         </td>
                     </tr>
                 </g:each>
