@@ -8,8 +8,9 @@ class Commande {
     Double prixTotal
 
 
-    static final Integer STATUS_EN_ATTENTE = 0
-    static final Integer STATUS_VALIDE = 1
+    static final Integer STATUS_EN_PANIER = 0
+    static final Integer STATUS_EN_ATTENTE = 1
+    static final Integer STATUS_VALIDE = 2
 
     static constraints = {
         utilisateur nullable: Boolean.FALSE
