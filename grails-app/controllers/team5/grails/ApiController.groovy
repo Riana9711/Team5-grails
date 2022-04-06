@@ -269,7 +269,6 @@ class ApiController {
                 }
 
                 if (categorie){
-                    Hashtag.where { lower(tag) == "#london" }.list()
 
                     total = Produit.countByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%")
                     produits = Produit.findAllByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
