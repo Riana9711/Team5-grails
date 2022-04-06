@@ -62,15 +62,20 @@ class BootStrap {
     @Transactional
     def anotherMagicalData(){
 
-        def adminRole = new Role(authority: 'ROLE_ADMIN').save()
-        def clientRole = new Role(authority: 'ROLE_CLIENT').save()
+        //création rôles
+        def adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
+        def clientRole = new Role(authority: 'ROLE_CLIENT').save(flush: true)
 
-        def admin = new Utilisateur(username: "admin", email: "admin@gmail.com", password: "admin").save()
-        UtilisateurRole.create(admin, adminRole);
+        //création admin
+        def admin = new Utilisateur(username: "admin", email: "admin@gmail.com", password: "admin").save(flush: true)
+        UtilisateurRole.create(admin, adminRole, true);
 
+        //Création catégorie
         ["t-shirt", "pantalon", "chemise", "costard"].each {String libelle ->
-            new Categorie(libelle: libelle).save()
+            new Categorie(libelle: libelle).save(flush: true)
         }
+
+        //création utilisateur
         ["harry", "sandie"].eachWithIndex {String username, i ->
             def utilisateurInstance = new Utilisateur(username: username, email: "$username@ituniversity-mg.com", createdAt: new Date(), password: "password")
             (1..5).each {
@@ -86,26 +91,42 @@ class BootStrap {
                             active: Boolean.TRUE,
                             categorie: Categorie.get(i+1)
                     )
-                    (1..3).each {
-                        produitInstance.addToImages( new Image(filename: "fichier_$username-$index-$it-a.jpg"))
+
+                    //Ajout images de produits
+                    /*(1..3).each {
+                        def imageInstance = new Image(filename: "fichier_$username-$index-$it-a.jpg")
+//                        imageInstance.save(flush: true)
+                        produitInstance.addToImages(imageInstance)
                         produitInstance.errors.getAllErrors().each {
                             println(it)
                         }
-                    }
-                    utilisateurInstance.addToProduits(produitInstance)
-                    def commandeInstance = new Commande(utilisateur: utilisateurInstance,produit: produitInstance,nombre: (i+1),statut: Commande.STATUS_EN_ATTENTE,prixTotal: ((i+1)*12))
-                    commandeInstance.save()
+                    }*/
+//                    produitInstance.save(flush: true)
+
+                    //Ajout produits de user
+                    //utilisateurInstance.addToProduits(produitInstance)
+                    /*def commandeInstance = new Commande(utilisateur: utilisateurInstance,produit: produitInstance,nombre: (i+1),statut: Commande.STATUS_EN_ATTENTE,prixTotal: ((i+1)*12))
+                    commandeInstance.save(flush: true)*/
 
             }
-            utilisateurInstance.save()
-
-            UtilisateurRole.create(utilisateurInstance, clientRole);
-
-            UtilisateurRole.withSession {
-                it.flush();
-                it.clear();
+            utilisateurInstance.save(flush: true)
+            println("+++++++++++++++++++++++")
+            println(utilisateurInstance)
+            println(clientRole)
+            if (utilisateurInstance.hasErrors()) {
+                log.warn "Failed to save $utilisateurInstance: $utilisateurInstance.errors"
             }
+            if (clientRole.hasErrors()) {
+                log.warn "Failed to save $clientRole: $clientRole.errors"
+            }
+            UtilisateurRole.create(utilisateurInstance, clientRole, true);
+            println("------------------------")
 
+        }
+
+        UtilisateurRole.withSession {
+            it.flush();
+            it.clear();
         }
 
         insertAnnonce()

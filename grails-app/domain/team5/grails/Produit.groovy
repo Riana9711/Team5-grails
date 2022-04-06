@@ -20,6 +20,7 @@ class Produit {
         description type: 'text'
         dateCreated date: new Date()
         active TRUE: Boolean.TRUE
+//        images cascade: 'all-delete-orphan'
     }
 
     static constraints = {

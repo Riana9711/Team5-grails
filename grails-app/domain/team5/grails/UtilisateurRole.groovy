@@ -50,9 +50,17 @@ class UtilisateurRole implements Serializable {
 	}
 
 	static UtilisateurRole create(Utilisateur utilisateur, Role role, boolean flush = false) {
-		def instance = new UtilisateurRole(utilisateur: utilisateur, role: role)
-		instance.save(flush: flush)
-		instance
+		try{
+			def instance = new UtilisateurRole(utilisateur: utilisateur, role: role)
+			println(">>>>>>>>>>>>>>>>>>>>>>")
+			println(instance)
+			println "instance null? ${instance == null}"
+			instance.save(flush: flush)
+			println("<<<<<<<<<<<<<<<<<<<<<<")
+			instance
+		}catch(Exception e){
+			println(e.printStackTrace())
+		}
 	}
 
 	static boolean remove(Utilisateur u, Role r) {
