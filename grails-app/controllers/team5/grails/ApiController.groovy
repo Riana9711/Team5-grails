@@ -174,6 +174,27 @@ class ApiController {
         return response.status = 406
     }
 
+    def findTopProducts() {
+        def produits
+        // recuperation de la methode HTTP de l'utilisateur
+        switch (request.getMethod()) {
+            case "GET":
+                produits = Commande.executeQuery('select c.produit from Commande c' +
+                        '       group by c.produit ' +
+                        '       order by count(c.produit) desc ',
+                        [max: 6])
+                if (!produits)
+                    response.status = 404
+
+                response.withFormat {
+                    json { render produits as JSON }
+                    xml { render produits as XML }
+                }
+                break
+        }
+        return response.status = 406
+    }
+
     def annonces() {
         def annonceInstance
 
