@@ -174,6 +174,27 @@ class ApiController {
         return response.status = 406
     }
 
+    def findTopProducts() {
+        def produits
+        // recuperation de la methode HTTP de l'utilisateur
+        switch (request.getMethod()) {
+            case "GET":
+                produits = Commande.executeQuery('select c.produit from Commande c' +
+                        '       group by c.produit ' +
+                        '       order by count(c.produit) desc ',
+                        [max: 6])
+                if (!produits)
+                    response.status = 404
+
+                response.withFormat {
+                    json { render produits as JSON }
+                    xml { render produits as XML }
+                }
+                break
+        }
+        return response.status = 406
+    }
+
     def annonces() {
         def annonceInstance
 
@@ -248,7 +269,6 @@ class ApiController {
                 }
 
                 if (categorie){
-                    Hashtag.where { lower(tag) == "#london" }.list()
 
                     total = Produit.countByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%")
                     produits = Produit.findAllByCategorieAndLibelleIlike(Categorie.get(categorie),"%$libelle%",[max: limit, offset: offset])
@@ -324,6 +344,21 @@ class ApiController {
                     commandeInfo['idCommande'] = commande.id
                     commandeInfo['nombre'] = commande.nombre
                     commandeInfo['statut'] = commande.statut
+                    def statutValue = ''
+                    switch (commande.statut) {
+                        case Commande.STATUS_EN_PANIER:
+                            statutValue = 'En panier'
+                            break
+                        case Commande.STATUS_EN_ATTENTE:
+                            statutValue = 'En attente de validation'
+                            break
+                        case Commande.STATUS_VALIDE:
+                            statutValue = 'Validé'
+                            break
+                        default:
+                            break
+                    }
+                    commandeInfo['statutValue'] = statutValue
                     commandeInfo['prixTotal'] = commande.prixTotal
                     Produit produitInstance = Produit.get(commande.produit.id)
                     commandeInfo['nomProduit'] = produitInstance.libelle
@@ -355,7 +390,7 @@ class ApiController {
                     return response.status = 404
                 Integer nombre = request.JSON.nombre
                 Double prix = produitInstance.prix
-                def newCommande = new Commande(utilisateur: utilisateurInstance, produit: produitInstance, nombre: nombre, statut: Commande.STATUS_EN_ATTENTE, prixTotal: nombre*prix)
+                def newCommande = new Commande(utilisateur: utilisateurInstance, produit: produitInstance, nombre: nombre, statut: Commande.STATUS_EN_PANIER    , prixTotal: nombre*prix)
 
                 def message = ''
                 def status = ''
@@ -383,19 +418,65 @@ class ApiController {
         }
     }
 
-    def validateCommande() {
+    def doCommande() {
         switch (request.getMethod()) {
             case "POST":
-                if (!params.idCommande ) {
-                    return response.status = 400
-                }
-                def commande = Commande.get(params.idCommande)
-                commande.setStatut(Commande.STATUS_VALIDE)
-                if (commande.isDirty())
-                    commande.save()
                 def message = ''
                 def status = ''
+                try {
+                    if (!request.JSON.idCommande ) {
+                        return response.status = 400
+                    }
+                    def commande = Commande.get(request.JSON.idCommande)
 
+                    if(!commande) {
+                        response.status = 404
+                    }
+
+                    commande.setStatut(Commande.STATUS_EN_ATTENTE)
+                    commande.save(flush: true)
+                    status = 'success'
+                }
+                catch (Exception e){
+                    status = 'error'
+                    println e.getMessage()
+                    message = e.getMessage()
+                }
+
+                def responseData = [
+                    'status': status,
+                    'message': message,
+                ]
+
+                response.withFormat {
+                    json { render responseData as JSON }
+                    xml { render responseData as XML }
+                }
+                break
+            default:
+                break
+        }
+    }
+    def deleteCommande() {
+        switch (request.getMethod()) {
+            case "DELETE":
+                if (!params.id ) {
+                    return response.status = 400
+                }
+                def commandeToDelete = Commande.get(params.id)
+                if (!commandeToDelete) {
+                    return response.status = 404
+                }
+                commandeToDelete.delete(flush: true)
+                def message = ''
+                def status = ''
+                if (!commandeToDelete.errors.allErrors.isEmpty()) {
+                    status = 'error'
+                    commandeToDelete.errors.allErrors.each {
+                        message = it
+                    }
+                }
+                else
                     status = 'success'
 
                 def responseData = [
