@@ -395,7 +395,7 @@ class ApiController {
 
                 def message = ''
                 def status = ''
-                if (!newCommande.save()) {
+                if (!newCommande.save(flush: true)) {
                     status = 'error'
                     newCommande.errors.allErrors.each {
                         message = it
