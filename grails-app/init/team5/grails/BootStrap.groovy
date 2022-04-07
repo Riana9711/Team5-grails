@@ -113,10 +113,10 @@ class BootStrap {
             println("+++++++++++++++++++++++")
             println(utilisateurInstance)
             println(clientRole)
-            if (utilisateurInstance.hasErrors()) {
+            if (utilisateurInstance && utilisateurInstance.hasErrors()) {
                 log.warn "Failed to save $utilisateurInstance: $utilisateurInstance.errors"
             }
-            if (clientRole.hasErrors()) {
+            if (clientRole && clientRole.hasErrors()) {
                 log.warn "Failed to save $clientRole: $clientRole.errors"
             }
             UtilisateurRole.create(utilisateurInstance, clientRole, true);
