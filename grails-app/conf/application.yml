@@ -100,22 +100,22 @@ dataSource:
     jmxExport: true
     driverClassName: org.postgresql.Driver
     dialect: org.hibernate.dialect.PostgreSQLDialect
-    username: "harrylepap"
-    password: "angularIsBae"
+    username: "iwpihimm"
+    password: "LiuC-iklCDDG0EcDoYOhj14AuBIYza7z"
 
 environments:
     development:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://batyr.db.elephantsql.com:5432/iwpihimm
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://batyr.db.elephantsql.com:5432/iwpihimm
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://batyr.db.elephantsql.com:5432/iwpihimm
             properties:
                 jmxEnabled: true
                 initialSize: 5
