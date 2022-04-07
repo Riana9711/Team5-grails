@@ -31,6 +31,7 @@
                     </g:each>--}%
                     <th>Utilisateur</th>
                     <th>Produit</th>
+                    <th>Prix</th>
                     <th>Nombre</th>
                     <th>Status</th>
                     <th>Prix Total</th>
@@ -43,11 +44,15 @@
                         <td>${command.utilisateur}</td>
                         <td><g:link controller="produit" action="show"
                                     params='[id: "${command.produit.id}"]'>${command.produit}</g:link></td>
+                        <td>${command.produit.prix}</td>
                         <td>${command.nombre}</td>
                         <td>
                             <g:if test="${command.statut==0}">
-                                En attente
+                                En Panier
                             </g:if>
+                            <g:elseif test="${command.statut==1}">
+                                En attente de validation
+                            </g:elseif>
                             <g:else>
                                 Validé
                             </g:else>
