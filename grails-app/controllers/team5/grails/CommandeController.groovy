@@ -116,7 +116,7 @@ class CommandeController {
             def produit = produitService.get(commande.produit.id)
 
             // modifier status commande en validé
-            commande.statut = 1
+            commande.statut = 2
             commandeService.save(commande)
 
             // "commande validée, reste stock produit 1 = 5"

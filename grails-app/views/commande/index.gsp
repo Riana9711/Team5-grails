@@ -60,7 +60,7 @@
                         <td>${command.prixTotal} ar</td>
                         <td><g:link controller="commande" action="show"
                                     params='[id: "${command.id}"]'>Détail</g:link>
-                        <g:if test="${command.statut==0}">
+                        <g:if test="${command.statut==1}">
                             <g:link controller="commande" action="accepterCommande"
                                     params='[id: "${command.id}"]'>Accepter</g:link>
                         </g:if>
