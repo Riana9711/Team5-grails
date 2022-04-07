@@ -107,15 +107,15 @@ environments:
     development:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com.com:5432/dfk96qic1c1ed
+            url: jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/dfk96qic1c1ed
             properties:
                 jmxEnabled: true
                 initialSize: 5
